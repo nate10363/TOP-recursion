@@ -1,3 +1,6 @@
+/* eslint-disable no-alert */
+/* eslint-disable no-return-assign */
+/* eslint-disable radix */
 /* eslint-disable consistent-return */
 /* eslint-disable no-plusplus */
 /* eslint-disable no-console */
@@ -17,7 +20,6 @@ const iterateFibonacci = (val) => {
 
 const recurseFibonacci = (val, fibArray = [0, 1]) => {
   if (val <= 2) {
-    // eslint-disable-next-line no-return-assign
     return fibonacciRecursionPara.textContent = `[${fibArray}]`;
   }
   return (recurseFibonacci(val - 1, [
@@ -30,7 +32,6 @@ fibonacciBtn.addEventListener('click', () => {
   if (fibonacciInput.value > 35) {
     fibonacciIterationPara.textContent = '';
     fibonacciRecursionPara.textContent = '';
-    // eslint-disable-next-line no-alert
     return alert('Please enter a value less than 36');
   }
 
@@ -39,13 +40,11 @@ fibonacciBtn.addEventListener('click', () => {
   fibonacciInput.value = '';
 });
 
-// eslint-disable-next-line consistent-return
 fibonacciInput.addEventListener('keydown', (e) => {
   if (e.key === 'Enter') {
     if (fibonacciInput.value > 35) {
       fibonacciIterationPara.textContent = '';
       fibonacciRecursionPara.textContent = '';
-      // eslint-disable-next-line no-alert
       return alert('Please enter a value less than 36');
     }
 
@@ -53,4 +52,47 @@ fibonacciInput.addEventListener('keydown', (e) => {
     recurseFibonacci(fibonacciInput.value);
     fibonacciInput.value = '';
   }
+});
+
+// Merge Functions
+
+const mergeInput = document.getElementById('merge-input');
+const mergeBtn = document.getElementById('merge-btn');
+const mergePara = document.getElementById('merge-para');
+
+const merge = (left, right) => {
+  const resultArr = [];
+
+  while (left.length && right.length) {
+    if (left[0] <= right[0]) {
+      resultArr.push(left.shift());
+    } else {
+      resultArr.push(right.shift());
+    }
+  }
+
+  return mergePara.textContent = [...resultArr, ...left, ...right];
+};
+
+const mergeSort = (arr) => {
+  if (arr.length <= 1) {
+    return arr;
+  }
+  const middle = Math.floor(arr.length / 2);
+  const left = arr.slice(0, middle);
+  const right = arr.slice(middle, arr.length);
+
+  return merge(mergeSort(left), mergeSort(right));
+};
+
+mergeInput.addEventListener('keydown', (e) => {
+  if (e.key === 'Enter') {
+    const parsedArr = [...mergeInput.value.split(',')].map((el) => Number(el));
+    mergeSort(parsedArr);
+  }
+});
+
+mergeBtn.addEventListener('click', () => {
+  const parsedArr = [...mergeInput.value.split(',')].map((el) => Number(el));
+  mergeSort(parsedArr);
 });
